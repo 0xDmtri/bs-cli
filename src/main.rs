@@ -1,52 +1,35 @@
-use std::{env, f64::consts::PI, process};
+use clap::Parser;
+use std::f64::consts::PI;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    // get args from the CLI
+    let mut args = Option::parse();
 
-    // get inputs from CLI args
-    let inputs: Option = Option::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
+    // covert days to decimals
+    args.days = args.days / 360.;
 
     // call funcs
-    let call_price = call(&inputs);
-    let put_price = put(&inputs);
+    let call_price = call(&args);
+    let put_price = put(&args);
 
     // print output
     println!("Call price: {call_price}");
     println!("Put price: {put_price}");
 }
 
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
 pub struct Option {
+    #[clap(short, long, value_parser)]
     under: f64,
+    #[clap(short, long, value_parser)]
     strike: f64,
+    #[clap(short, long, value_parser)]
     days: f64,
+    #[clap(short, long, value_parser)]
     rate: f64,
+    #[clap(short, long, value_parser)]
     vol: f64,
-}
-
-impl Option {
-    fn new(args: &[String]) -> Result<Option, &str> {
-        if args.len() != 6 {
-            println!("{args:#?}");
-            return Err::<Option, &str>("Wrong number of arguments!");
-        }
-
-        let under = args[1].parse::<f64>().unwrap();
-        let strike = args[2].parse::<f64>().unwrap();
-        let tte = args[3].parse::<f64>().unwrap() / 365.;
-        let rate = args[4].parse::<f64>().unwrap();
-        let vol = args[5].parse::<f64>().unwrap();
-
-        Ok(Option {
-            under,
-            strike,
-            days: tte,
-            rate,
-            vol,
-        })
-    }
 }
 
 pub fn phi__(x: f64) -> f64 {
