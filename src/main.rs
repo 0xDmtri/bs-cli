@@ -12,9 +12,23 @@ fn main() {
     let call_price = call(&args);
     let put_price = put(&args);
 
+    let call_delta = get_call_delta(&args);
+    let call_theta = get_call_theta(&args);
+    let call_rho = get_call_theta(&args);
+
+    let put_delta = get_put_delta(&args);
+    let put_theta = get_put_theta(&args);
+    let put_rho = get_put_rho(&args);
+
+    let vega = get_vega(&args);
+    let gamma = get_gamma(&args);
+    let norm_strk = moneyness(&args);
+
     // print output
-    println!("Call price: {call_price}");
-    println!("Put price: {put_price}");
+    println!("CALL | NS: {:.3} | price: {:.2} | delta: {:.2} | gamma: {:.6} | vega: {:.2} | theta: {:.3} | rho: {:.3}",
+        norm_strk, call_price, call_delta, gamma, vega, call_theta, call_rho);
+    println!("PUT | NS: {:.3} | price: {:.2} | delta: {:.2} | gamma: {:.6} | vega: {:.2} | theta: {:.3} | rho: {:.3}",
+        norm_strk, put_price, put_delta, gamma, vega, put_theta, put_rho);
 }
 
 #[derive(Parser, Debug)]
