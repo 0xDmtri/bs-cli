@@ -201,6 +201,7 @@ pub fn moneyness(option: &Option) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::implied_vol_call;
+    use crate::implied_vol_put;
 
     #[test]
     fn test_call_ivol() {
@@ -210,8 +211,6 @@ mod tests {
 
     #[test]
     fn test_put_ivol() {
-        use crate::implied_vol_put;
-
         let result = implied_vol_put(20000., 20000., 7. / 360., 0.03, 661.);
         assert_eq!(result, 0.5997085571289063);
     }
