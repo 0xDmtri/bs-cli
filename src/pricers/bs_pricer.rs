@@ -22,7 +22,7 @@ impl Option {
         }
     }
 
-    fn __phi(&self, x: f64) -> f64 {
+    fn __ph1(&self, x: f64) -> f64 {
         let part1 = -x * x / 2.0;
         let part2 = f64::sqrt(2.0 * PI);
         let value = f64::exp(part1) / part2;
@@ -30,19 +30,19 @@ impl Option {
     }
 
     fn __call(&self) -> f64 {
-        let call = self.under * self.cdf(self.d1(), 0., 1.)
-            - self.strike * f64::exp(-self.rate * self.tte) * self.cdf(self.d2(), 0., 1.);
+        let call = self.under * self.__cdf(self.__d1(), 0., 1.)
+            - self.strike * f64::exp(-self.rate * self.tte) * self.__cdf(self.__d2(), 0., 1.);
         call
     }
 
     fn __put(&self) -> f64 {
-        let put = self.strike * f64::exp(-self.rate * self.tte) * self.cdf(-self.d2(), 0., 1.)
-            - self.under * self.cdf(-self.d1(), 0., 1.);
+        let put = self.strike * f64::exp(-self.rate * self.tte) * self.__cdf(-self.__d2(), 0., 1.)
+            - self.under * self.__cdf(-self.__d1(), 0., 1.);
         put
     }
 
     fn __call_delta(&self) -> f64 {
-        let delta = self.cdf(self.d1(), 0., 1.);
+        let delta = self.__cdf(self.__d1(), 0., 1.);
         delta
     }
 
@@ -52,22 +52,22 @@ impl Option {
     }
 
     fn __call_theta(&self) -> f64 {
-        let ct = -(self.under * self.vola * self.cdf(self.d1(), 0., 1.))
+        let ct = -(self.under * self.vola * self.__cdf(self.__d1(), 0., 1.))
             / (2. * f64::sqrt(self.tte)
                 - self.rate
                     * self.strike
                     * f64::exp(-self.rate * self.tte)
-                    * self.cdf(self.d2(), 0., 1.));
+                    * self.__cdf(self.__d2(), 0., 1.));
         ct / 360.
     }
 
     fn __put_theta(&self) -> f64 {
-        let ct = -(self.under * self.vola * self.cdf(self.d1(), 0., 1.))
+        let ct = -(self.under * self.vola * self.__cdf(self.__d1(), 0., 1.))
             / (2. * f64::sqrt(self.tte)
                 - self.rate
                     * self.strike
                     * f64::exp(-self.rate * self.tte)
-                    * (1. - self.cdf(self.d2(), 0., 1.)));
+                    * (1. - self.__cdf(self.__d2(), 0., 1.)));
         ct / 360.
     }
 
@@ -76,7 +76,7 @@ impl Option {
             * self.under
             * self.tte
             * f64::exp(-self.rate * self.tte)
-            * self.cdf(self.d1(), 0., 1.);
+            * self.__cdf(self.__d1(), 0., 1.);
         call_rho
     }
 
@@ -85,16 +85,16 @@ impl Option {
             * self.under
             * self.tte
             * f64::exp(-self.rate * self.tte)
-            * (1. - self.cdf(self.d1(), 0., 1.));
+            * (1. - self.__cdf(self.__d1(), 0., 1.));
         call_rho
     }
 
-    pub fn pdf(&self, x: f64, mu: f64, sigma: f64) -> f64 {
-        let value = self.__phi((x - mu) / sigma) / sigma;
+    fn __pdf(&self, x: f64, mu: f64, sigma: f64) -> f64 {
+        let value = self.__ph1((x - mu) / sigma) / sigma;
         value
     }
 
-    pub fn phi(&self, z: f64) -> f64 {
+    fn __phi2(&self, z: f64) -> f64 {
         if z < -8.0 {
             0.0
         } else if z > 8.0 {
@@ -108,25 +108,25 @@ impl Option {
                 term *= z * z / i;
                 i += 2.0;
             }
-            let value = 0.5 + total * self.__phi(z);
+            let value = 0.5 + total * self.__ph1(z);
             value
         }
     }
 
-    pub fn cdf(&self, z: f64, mu: f64, sigma: f64) -> f64 {
-        let value = self.phi((z - mu) / sigma);
+    fn __cdf(&self, z: f64, mu: f64, sigma: f64) -> f64 {
+        let value = self.__phi2((z - mu) / sigma);
         value
     }
 
-    pub fn d1(&self) -> f64 {
+    fn __d1(&self) -> f64 {
         let sd1 = (f64::ln(self.under / self.strike)
             + (self.rate + 0.5 * self.vola * self.vola) * self.tte)
             / (self.vola * (f64::sqrt(self.tte)));
         sd1
     }
 
-    pub fn d2(&self) -> f64 {
-        let d2 = self.d1() - self.vola * f64::sqrt(self.tte);
+    fn __d2(&self) -> f64 {
+        let d2 = self.__d1() - self.vola * f64::sqrt(self.tte);
         d2
     }
 
@@ -152,12 +152,13 @@ impl Option {
     }
 
     pub fn gamma(&self) -> f64 {
-        let gamma = self.cdf(self.d1(), 0., 1.) / (self.under * (self.vola * f64::sqrt(self.tte)));
+        let gamma =
+            self.__cdf(self.__d1(), 0., 1.) / (self.under * (self.vola * f64::sqrt(self.tte)));
         gamma
     }
 
     pub fn vega(&self) -> f64 {
-        let vega = 0.01 * self.under * f64::sqrt(self.tte) * self.cdf(self.d1(), 0., 1.);
+        let vega = 0.01 * self.under * f64::sqrt(self.tte) * self.__cdf(self.__d1(), 0., 1.);
         vega
     }
 
@@ -175,62 +176,40 @@ impl Option {
     }
 }
 
-// pub fn implied_vol_call(s: f64, k: f64, t: f64, r: f64, target: f64) -> f64 {
-//     let mut high = 20.;
-//     let mut low = 0.;
-//     while (high - low) > 0.0001 {
-//         let option = Option {
-//             under: s,
-//             strike: k,
-//             days: t,
-//             rate: r,
-//             vol: (high + low) / 2.,
-//         };
-//         if call(&option) > target {
-//             high = (high + low) / 2.;
-//         } else {
-//             low = (high + low) / 2.;
-//         }
-//     }
-//     let ivol = (high + low) / 2.;
-//     ivol
-// }
+#[cfg(test)]
+mod tests {
+    use crate::pricers::Option;
+    use crate::types::OptionType;
 
-// pub fn implied_vol_put(s: f64, k: f64, t: f64, r: f64, target: f64) -> f64 {
-//     let mut high = 20.;
-//     let mut low = 0.;
-//     while (high - low) > 0.0001 {
-//         let option = Option {
-//             under: s,
-//             strike: k,
-//             days: t,
-//             rate: r,
-//             vol: (high + low) / 2.,
-//         };
-//         if put(&option) > target {
-//             high = (high + low) / 2.;
-//         } else {
-//             low = (high + low) / 2.;
-//         }
-//     }
-//     let ivol = (high + low) / 2.;
-//     ivol
-// }
+    #[test]
+    fn test_prices() {
+        let params = [100., 100., 7. / 360., 0.03, 0.80];
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::implied_vol_call;
-//     use crate::implied_vol_put;
+        let call = Option::new(OptionType::Call, &params);
+        let put = Option::new(OptionType::Put, &params);
 
-//     #[test]
-//     fn test_call_ivol() {
-//         let result = implied_vol_call(20000., 20000., 7. / 360., 0.03, 673.);
-//         assert_eq!(result, 0.6000137329101563);
-//     }
+        let call_delta = call.delta();
+        let call_gamma = call.gamma();
+        let call_vega = call.vega();
+        let call_theta = call.theta();
+        let call_rho = call.rho();
+        let call_moneyness = call.moneyness();
 
-//     #[test]
-//     fn test_put_ivol() {
-//         let result = implied_vol_put(20000., 20000., 7. / 360., 0.03, 661.);
-//         assert_eq!(result, 0.5997085571289063);
-//     }
-// }
+        let put_delta = put.delta();
+        let put_gamma = put.gamma();
+        let put_vega = put.vega();
+        let put_theta = put.theta();
+        let put_rho = put.rho();
+        let put_moneyness = put.moneyness();
+
+        assert_eq!(call_delta, 1.0 + put_delta);
+        assert_eq!(call_gamma, put_gamma);
+        assert_eq!(call_vega, put_vega);
+        assert_eq!(call_moneyness, put_moneyness);
+
+        assert_eq!(call_theta, 0.10046214845877008);
+        assert_eq!(put_theta, 0.09098031400937832);
+        assert_eq!(call_rho, 0.010189223373781598);
+        assert_eq!(put_rho, 0.009243881785683248)
+    }
+}
