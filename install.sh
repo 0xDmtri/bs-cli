@@ -24,10 +24,11 @@ if [ ! -d ~/.local ]; then
 fi
 
 mkdir ~/.local/bin/bs-cli/
-mv bs-cli/target/release/bs-cli ~/.local/bin/bs-cli/bs
+mv ~/bs-cli/target/release/bs-cli ~/.local/bin/bs-cli/bs
+rm -rf ~/bs-cli
 
+echo ''
 echo 'Binaries placed in ~/.local/bin/bs-cli'
 echo '---------------------------------------------------'
 echo 'To make available globally, add to your profile:'
-
 echo 'export PATH="$PATH:/$HOME/.local/bin/bs-cli"'
