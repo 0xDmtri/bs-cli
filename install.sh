@@ -7,7 +7,7 @@ then
   abort "BS-CLI is only supported on macOS and Linux."
 fi
 
-cd bs-cli && cargo build --release && chmod -x target/release/bs-cli
+cd bs-cli && cargo build --release
 
 if [ -d ~/.local/bin/bs-cli/ ]; then
   rm -rf ~/.local/bin/bs-cli/
@@ -22,6 +22,7 @@ fi
 
 mkdir ~/.local/bin/bs-cli/
 mv ~/bs-cli/target/release/bs-cli ~/.local/bin/bs-cli/bs
+chmod +x ~/.local/bin/bs-cli/bs
 rm -rf ~/bs-cli
 
 echo ''
