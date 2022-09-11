@@ -1,4 +1,6 @@
 ## BS-CLI
+
+*Very simple and minimal Black Scholes CLI implemented in Rust*
 ---
 
 
