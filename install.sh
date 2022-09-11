@@ -2,10 +2,7 @@
 
 # First check OS.
 OS="$(uname)"
-if [[ "${OS}" == "Linux" ]]
-then
-  HOMEBREW_ON_LINUX=1
-elif [[ "${OS}" != "Darwin" ]]
+if [[ "${OS}" != "Linux" ]] & [[ "${OS}" != "Darwin" ]]
 then
   abort "BS-CLI is only supported on macOS and Linux."
 fi
