@@ -1,2 +1,2 @@
-mod black_scholes;
-pub use black_scholes::{Option, OptionType};
+mod bs_pricer;
+pub use bs_pricer::Option;

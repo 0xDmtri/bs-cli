@@ -1,10 +1,5 @@
+use crate::types::OptionType;
 use std::f64::consts::PI;
-
-#[derive(Clone)]
-pub enum OptionType {
-    Call,
-    Put,
-}
 
 pub struct Option {
     option_type: OptionType,

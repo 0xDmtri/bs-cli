@@ -1,4 +1,5 @@
-use bs_cli::pricers::{Option, OptionType};
+use bs_cli::pricers::Option;
+use bs_cli::types::OptionType;
 use clap::Parser;
 
 fn main() {
