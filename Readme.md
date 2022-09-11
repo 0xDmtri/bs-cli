@@ -3,13 +3,13 @@
 
 
 ### Requirements:
-Rustup:
-```curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh```
+1. Linux or macOS
+2. Rustup: ```curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh```
 
 
 ### Installation:
 1. ```git clone https://github.com/0xDmtri/bs-cli.git```
-2. ```~/bs-cli/install.sh```
+2. ```sh ~/bs-cli/install.sh```
 
 
 ### Usage:
