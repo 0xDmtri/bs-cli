@@ -24,7 +24,7 @@ if [ ! -d ~/.local ]; then
 fi
 
 mkdir ~/.local/bin/bs-cli/
-mv bs-cli/target/release/bs-cli ~/.local/bin/bs-cli/bs-cli
+mv bs-cli/target/release/bs-cli ~/.local/bin/bs-cli/bs
 
 echo 'Binaries placed in ~/.local/bin/bs-cli'
 echo '---------------------------------------------------'

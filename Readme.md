@@ -13,11 +13,11 @@
 
 
 ### Usage:
-```bs-cli -u <Underlying> -s <Strike> -d <Days> -r <Rate> -v <Volatility> ```
+```bs -u <Underlying> -s <Strike> -d <Days> -r <Rate> -v <Volatility> ```
 
 
 ### Example:
-``` bs-cli -u 100.0 -s 100.0 -d 0.25 -v 0.8```
+``` bs -u 100.0 -s 100.0 -d 0.25 -v 0.8```
 
 
 ### Contributors:
