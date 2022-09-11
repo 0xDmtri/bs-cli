@@ -12,8 +12,8 @@ fi
 
 cd bs-cli && cargo build --release && chmod -x target/release/bs-cli
 
-if [ -d ~/.local/bin/bs-cli ]; then
-  rm -rf ~/.local/bin/bs-cli
+if [ -d ~/.local/bin/bs-cli/ ]; then
+  rm -rf ~/.local/bin/bs-cli/
 fi
 
 if [ ! -d ~/.local ]; then 
@@ -23,8 +23,8 @@ if [ ! -d ~/.local ]; then
   fi
 fi
 
-mkdir ~/.local/bin/bs-cli
-mv bs-cli/target/release/bs-cli ~/.local/bin/bs-cli
+mkdir ~/.local/bin/bs-cli/
+mv bs-cli/target/release/bs-cli ~/.local/bin/bs-cli/
 
 echo 'Binaries placed in ~/.local/bin/bs-cli'
 echo '---------------------------------------------------'
