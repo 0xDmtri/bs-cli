@@ -213,3 +213,45 @@ mod tests {
         assert_eq!(put_rho, 0.009243881785683248)
     }
 }
+
+// pub fn implied_vol_call(s: f64, k: f64, t: f64, r: f64, target: f64) -> f64 {
+//     let mut high = 20.;
+//     let mut low = 0.;
+//     while (high - low) > 0.0001 {
+//         let option = Option {
+//             under: s,
+//             strike: k,
+//             tte: t,
+//             rate: r,
+//             vola: (high + low) / 2.,
+//         };
+//         if call(&option) > target {
+//             high = (high + low) / 2.;
+//         } else {
+//             low = (high + low) / 2.;
+//         }
+//     }
+//     let ivol = (high + low) / 2.;
+//     ivol
+// }
+
+// pub fn implied_vol_put(s: f64, k: f64, t: f64, r: f64, target: f64) -> f64 {
+//     let mut high = 20.;
+//     let mut low = 0.;
+//     while (high - low) > 0.0001 {
+//         let option = Option {
+//             under: s,
+//             strike: k,
+//             tte: t,
+//             rate: r,
+//             vola: (high + low) / 2.,
+//         };
+//         if put(&option) > target {
+//             high = (high + low) / 2.;
+//         } else {
+//             low = (high + low) / 2.;
+//         }
+//     }
+//     let ivol = (high + low) / 2.;
+//     ivol
+// }
