@@ -1,5 +1,4 @@
-use bs_cli::pricers::Option;
-use bs_cli::types::OptionType;
+use bs_cli::{pricer::Option, types::OptionType};
 use clap::Parser;
 
 fn main() {
@@ -10,7 +9,7 @@ fn main() {
     let inputs = [
         args.under,
         args.strike,
-        args.days / 360., // covert days to decimals
+        args.days / 360., // convert days to decimals
         args.rate,
         args.vola,
     ];
